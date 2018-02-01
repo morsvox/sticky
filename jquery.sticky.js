@@ -34,7 +34,8 @@
       getWidthFrom: '',
       widthFromWrapper: true, // works only when .getWidthFrom is empty
       responsiveWidth: false,
-      zIndex: 'inherit'
+      zIndex: 'inherit',
+      getHeightFrom: ''
     },
     $window = $(window),
     $document = $(document),
@@ -114,21 +115,38 @@
           }
 
           // Check if sticky has reached end of container and stop sticking
-          var stickyWrapperContainer = s.stickyWrapper.parent();
-          var unstick = (s.stickyElement.offset().top + s.stickyElement.outerHeight() >= stickyWrapperContainer.offset().top + stickyWrapperContainer.outerHeight()) && (s.stickyElement.offset().top <= s.topSpacing);
-
+          if( s.getHeightFrom ){
+            var stickyWrapperContainer = s.stickyWrapper.parents(s.getHeightFrom);
+            if( s.stickyElement.hasClass('locked') && (scrollTop + s.stickyElement.outerHeight() + s.topSpacing) < (stickyWrapperContainer.offset().top + stickyWrapperContainer.outerHeight()) ){
+              var unstick = (s.stickyElement.offset().top + s.stickyElement.outerHeight() < stickyWrapperContainer.offset().top + stickyWrapperContainer.outerHeight() && stickyWrapperContainer.offset().top + stickyWrapperContainer.outerHeight()) ;
+            }else{
+              var unstick = (s.stickyElement.offset().top + s.stickyElement.outerHeight() >= stickyWrapperContainer.offset().top + stickyWrapperContainer.outerHeight());
+            }
+          }else{
+            var stickyWrapperContainer = s.stickyWrapper.parent();
+            var unstick = (s.stickyElement.offset().top + s.stickyElement.outerHeight() >= stickyWrapperContainer.offset().top + stickyWrapperContainer.outerHeight()) && (s.stickyElement.offset().top <= s.topSpacing);
+          }
+          
           if( unstick ) {
-            s.stickyElement
-              .css('position', 'absolute')
-              .css('top', '')
-              .css('bottom', 0)
-              .css('z-index', '');
+           if( s.getHeightFrom ){
+             s.stickyElement
+               .css('width', newWidth)
+               .css('position', 'absolute')
+               .css('top', s.stickyElement.outerHeight())
+               .css('z-index', s.zIndex).addClass('locked');
+           }else{
+             s.stickyElement
+               .css('position', 'absolute')
+               .css('top', '')
+               .css('bottom', 0)
+               .css('z-index', '');
+           }
           } else {
             s.stickyElement
               .css('position', 'fixed')
               .css('top', newTop)
               .css('bottom', '')
-              .css('z-index', s.zIndex);
+              .css('z-index', s.zIndex).removeClass('locked');
           }
         }
       }
