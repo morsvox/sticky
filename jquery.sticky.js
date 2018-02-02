@@ -117,10 +117,8 @@
           // Check if sticky has reached end of container and stop sticking
           if( s.getHeightFrom ){
             var stickyWrapperContainer = s.stickyWrapper.parents(s.getHeightFrom);
-            if( s.stickyElement.hasClass('locked') && (scrollTop + s.stickyElement.outerHeight() + s.topSpacing) < (stickyWrapperContainer.offset().top + stickyWrapperContainer.outerHeight()) ){
-              var unstick = (s.stickyElement.offset().top + s.stickyElement.outerHeight() < stickyWrapperContainer.offset().top + stickyWrapperContainer.outerHeight() && stickyWrapperContainer.offset().top + stickyWrapperContainer.outerHeight()) ;
-            }else{
-              var unstick = (s.stickyElement.offset().top + s.stickyElement.outerHeight() >= stickyWrapperContainer.offset().top + stickyWrapperContainer.outerHeight());
+            if( !((scrollTop + s.stickyElement.outerHeight() + s.topSpacing)  <= parseInt( stickyWrapperContainer.offset().top + stickyWrapperContainer.outerHeight() )) ){
+              var unstick = true;
             }
           }else{
             var stickyWrapperContainer = s.stickyWrapper.parent();
@@ -142,11 +140,11 @@
                .css('z-index', '');
            }
           } else {
-            s.stickyElement
-              .css('position', 'fixed')
-              .css('top', newTop)
-              .css('bottom', '')
-              .css('z-index', s.zIndex).removeClass('locked');
+              s.stickyElement
+                .css('position', 'fixed')
+                .css('top', newTop)
+                .css('bottom', '')
+                .css('z-index', s.zIndex).removeClass('locked');
           }
         }
       }
