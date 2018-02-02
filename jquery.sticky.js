@@ -130,7 +130,7 @@
              s.stickyElement
                .css('width', newWidth)
                .css('position', 'absolute')
-               .css('top', s.stickyElement.outerHeight())
+               .css('top', (stickyWrapperContainer.outerHeight()-s.stickyElement.outerHeight()) )
                .css('z-index', s.zIndex).addClass('locked');
            }else{
              s.stickyElement
